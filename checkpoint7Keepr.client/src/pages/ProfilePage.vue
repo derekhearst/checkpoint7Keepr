@@ -12,16 +12,19 @@ const vaults = ref([])
 const keeps = ref([])
 onMounted(async () => {
 	console.log('mounted')
-	await Promise.all([ // nice speed up
-		profilesService.getById(route.params.id),
-		profilesService.getVaultsByProfileId(route.params.id),
-		profilesService.getKeepsByProfileId(route.params.id)
-	]).then(([profileData, vaultData, keepData]) => {
-		profile.value = profileData
-		vaults.value = vaultData
-		keeps.value = keepData
+	watchEffect(async () => {
+		if (route.params.id) {
+			await Promise.all([ // nice speed up
+				profilesService.getById(route.params.id),
+				profilesService.getVaultsByProfileId(route.params.id),
+				profilesService.getKeepsByProfileId(route.params.id)
+			]).then(([profileData, vaultData, keepData]) => {
+				profile.value = profileData
+				vaults.value = vaultData
+				keeps.value = keepData
+			})
+		}
 	})
-
 })
 
 </script>

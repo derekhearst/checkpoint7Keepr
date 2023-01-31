@@ -52,24 +52,19 @@ public class KeepsRepository
 			userId = "";
 		}
 
-		Vault vault = _db.Query<Vault, Account, Vault>(@"
-		SELECT * FROM vaults v
-		JOIN accounts a ON v.creatorId = a.id
-		WHERE v.id = @vaultId
-		", (v, a) =>
-		{
-			v.Creator = a;
-			return v;
-		}, new { vaultId }).FirstOrDefault();
+		Vault vault = _db.Query<Vault>(@"
+		SELECT * FROM vaults
+		WHERE id = @vaultId
+		", new { vaultId }).First();
 
 		if (vault == null)
 		{
-			throw new Exception("Invalid Id");
+			throw new Exception("Couldn't find that vault");
 		}
 
 		if (vault.CreatorId != userId && vault.IsPrivate)
 		{
-			throw new Exception("Invalid Id");
+			throw new Exception("Vault is private or you don't have access to it");
 		}
 
 		return _db.Query<KeepInVault, Account, KeepInVault>(@"

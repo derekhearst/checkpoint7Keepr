@@ -10,13 +10,20 @@ const props = defineProps({
 		required: true
 	}
 })
+const emits = defineEmits(['removeKeep'])
+
 const modelOpen = ref(false)
 const keptCount = ref(0)
 watchEffect(async () => {
+	let mainBody = document.querySelector('#mainBody')
 	if (modelOpen.value) {
+		mainBody.style.overflow = 'hidden'
 		let res = await keepsService.getById(props.keep.id)
 		keptCount.value = res.kept
 		props.keep.vies = res.views
+	}
+	else {
+		mainBody.style.overflow = 'visible'
 	}
 })
 const vaultId = ref(0)
@@ -28,8 +35,33 @@ async function saveKeep() {
 	}
 	keptCount.value++
 	modelOpen.value = false
-
 }
+
+async function removeKeep() {
+	if (await Pop.confirm("Are you sure you want to un-keep this keep?")) {
+		try {
+			await keepsService.removeKeep(props.keep?.vaultKeepId)
+			Pop.success('Keep Removed')
+			emits("removeKeep", props.keep.id)
+		} catch (error) {
+			Pop.error(error)
+		}
+	}
+}
+
+async function deleteKeep() {
+	if (await Pop.confirm("Are you sure you want to delete this keep?")) {
+		try {
+			await keepsService.deleteKeep(props.keep.id)
+			Pop.success('Keep Deleted')
+			emits("removeKeep", props.keep.id)
+		} catch (error) {
+			Pop.error(error)
+		}
+	}
+	modelOpen.value = false
+}
+
 </script>
 
 <template>
@@ -57,12 +89,22 @@ async function saveKeep() {
 
 				</div>
 				<div class="keepFooter">
-					<div class="d-flex align-items-center gap-3">
+					<button class="removeKeep" @click="removeKeep" v-if="keep.vaultKeepId">
+						<i class="mdi fs-4 mdi-close-octagon-outline"></i>
+						Un-Keep
+					</button>
+
+					<div class="d-flex align-items-center gap-3" v-else>
 						<select v-model="vaultId">
 							<option v-for="vault in AppState.myVaults" :value="vault.id">{{ vault.name }}</option>
 						</select>
 						<button class="niceButton" @click="saveKeep">Keep</button>
 					</div>
+					<button class="deleteKeep" @click="deleteKeep" v-if="keep.creatorId == AppState.account?.id">
+						<i class="mdi fs-4 mdi-trash-can"></i>
+						Delete Keep
+					</button>
+
 					<RouterLink :to="{
 						name: 'Profile', params: { id: keep.creator.id }
 					}">
@@ -77,11 +119,13 @@ async function saveKeep() {
 	</div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .keepCard {
 	position: relative;
 	margin-bottom: 1rem;
 	cursor: pointer;
+
+
 }
 
 .keepBG {
@@ -89,14 +133,16 @@ async function saveKeep() {
 	height: 100%;
 	width: 100%;
 	border-radius: 10px;
+	filter: brightness(80%);
 }
 
 h1 {
 	position: absolute;
 	bottom: 0;
 	left: .25rem;
+	margin: 0;
 	color: white;
-	background-color: rgba(0, 0, 0, 0.212);
+	// background-color: rgba(0, 0, 0, 0.212);
 
 }
 
@@ -108,6 +154,30 @@ h1 {
 	width: 50px;
 	border-radius: 50%;
 
+}
+
+.deleteKeep {
+	background-color: transparent;
+	color: lightcoral;
+	border: none;
+	font-weight: bold;
+	border-bottom: 2px solid lightcoral;
+	padding: -.5rem .5rem;
+
+	display: flex;
+	align-items: center;
+}
+
+.removeKeep {
+	background-color: transparent;
+	color: plum;
+	border: none;
+	font-weight: bold;
+	border-bottom: 2px solid plum;
+	padding: -.5rem .5rem;
+
+	display: flex;
+	align-items: center;
 }
 
 .modalBg {
@@ -140,6 +210,7 @@ h1 {
 	align-items: center;
 	justify-content: space-between;
 	padding: 1rem;
+	width: 60%;
 }
 
 .keepHeader {
@@ -160,8 +231,11 @@ h1 {
 .keepFooter {
 	display: flex;
 	gap: 1rem;
-	justify-content: center;
+	justify-content: space-between;
 	flex-wrap: wrap;
+
+	align-items: center;
+	width: 100%;
 
 }
 

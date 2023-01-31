@@ -29,9 +29,9 @@ public class VaultsService
 		return _vr.Delete(id, userId);
 	}
 
-	internal object GetVaultsByAccountId(string id)
+	internal object GetVaultsByAccountId(string id, string userId)
 	{
-		return _vr.GetVaultsByAccountId(id);
+		return _vr.GetVaultsByAccountId(id, userId);
 	}
 
 	public List<Vault> GetMyVaults(string id)

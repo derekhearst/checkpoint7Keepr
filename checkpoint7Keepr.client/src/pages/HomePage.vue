@@ -11,10 +11,16 @@ import { ref, watchEffect, onMounted } from 'vue';
 import { AppState } from '../AppState.js';
 import KeepCard from '../components/KeepCard.vue';
 import { keepsService } from '../services/KeepsService.js';
+import Pop from '../utils/Pop.js';
 
 
 onMounted(async () => {
-  await keepsService.getKeeps()
+  try {
+    await keepsService.getKeeps()
+  }
+  catch {
+    Pop.error("Couldn't load keeps")
+  }
 })
 
 </script>

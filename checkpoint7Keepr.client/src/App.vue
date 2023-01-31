@@ -2,9 +2,9 @@
   <header>
     <Navbar />
   </header>
-  <main id="mainBody">
-    <router-view />
-  </main>
+
+  <router-view />
+
 
 </template>
 

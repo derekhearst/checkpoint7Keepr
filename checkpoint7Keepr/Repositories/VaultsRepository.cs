@@ -66,17 +66,17 @@ public class VaultsRepository
 		return rows > 0;
 	}
 
-	internal List<Vault> GetVaultsByAccountId(string accountId)
+	internal List<Vault> GetVaultsByAccountId(string accountId, string userId)
 	{
 		return _db.Query<Vault, Account, Vault>(@"
 		SELECT * FROM vaults v 
 		JOIN accounts a ON v.creatorId = a.id  
-		WHERE v.creatorId = @accountId AND v.isPrivate = false;",
+		WHERE v.creatorId = @accountId AND (v.creatorId = @userId OR v.isPrivate = false);",
 		(v, a) =>
 		{
 			v.Creator = a;
 			return v;
-		}, new { accountId }).ToList();
+		}, new { accountId, userId }).ToList();
 	}
 
 	public List<Vault> GetMyVaults(string myAccountId)

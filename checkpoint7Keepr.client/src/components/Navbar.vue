@@ -34,7 +34,7 @@
         </div>
         <div>
           <label for="isPrivate">Private</label>
-          <input type="checkbox" required name="isPrivate" id="isPrivate" />
+          <input type="checkbox" name="isPrivate" id="isPrivate" />
         </div>
         <div>
           <button type="button" @click="isVaultModalOpen = false">Cancel</button>
@@ -75,24 +75,62 @@
 <script setup>
 
 import { ref, watchEffect, onMounted } from 'vue';
+import { keepsService } from '../services/KeepsService.js';
+import { vaultsService } from '../services/VaultsService.js';
 import Pop from '../utils/Pop.js';
 import Login from './Login.vue'
 
-async function createKeep() {
-  console.log('createKeep')
-  isKeepModalOpen.value = false
+async function createKeep(e) {
+  try {
+    keepsService.createKeep(
+      {
+        name: e.target.title.value,
+        img: e.target.img.value,
+        description: e.target.description.value
+      }
+    )
+    isKeepModalOpen.value = false
+    Pop.success('Keep created')
+  } catch (error) {
+    Pop.error(error)
+  }
+
 }
 
-async function createVault() {
-  console.log('createVault')
-  isVaultModalOpen.value = false
+async function createVault(e) {
+  try {
+    vaultsService.createVault(
+      {
+        name: e.target.name.value,
+        description: e.target.description.value,
+        img: e.target.img.value,
+        isPrivate: e.target.isPrivate.checked
+      }
+    )
+    Pop.success('Vault created')
+    isVaultModalOpen.value = false
+  } catch (error) {
+    Pop.error(error)
+  }
 
 }
 
 const isVaultModalOpen = ref(false)
 const isKeepModalOpen = ref(false)
 
-
+watchEffect(() => {
+  let mainBody = document.querySelector('#mainBody')
+  if (isVaultModalOpen.value) {
+    mainBody.style.overflow = 'hidden'
+  } else {
+    mainBody.style.overflow = 'visible'
+  }
+  if (isKeepModalOpen.value) {
+    mainBody.style.overflow = 'hidden'
+  } else {
+    mainBody.style.overflow = 'visible'
+  }
+})
 
 
 </script>

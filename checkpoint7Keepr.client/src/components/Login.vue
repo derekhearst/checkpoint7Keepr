@@ -3,10 +3,8 @@
     <button @click="login" v-if="!user.isAuthenticated">Login</button>
     <div v-else class="d-flex gap-2 align-items-center">
       <button class="" @click="logout">Logout</button>
-
-      <div v-if="account.picture || user.picture">
+      <div v-if="account.id">
         <RouterLink :to="{ name: 'Profile', params: { id: account.id } }">
-
           <img :src="account.picture || user.picture" alt="account photo" />
         </RouterLink>
       </div>

@@ -45,9 +45,9 @@ CREATE TABLE
         creatorId varchar(255) COMMENT 'Creator Id',
         vaultId int not null COMMENT 'Vault Id',
         keepId int not null COMMENT 'Keep Id',
-        FOREIGN KEY (vaultId) REFERENCES vaults(id),
-        Foreign Key (creatorId) REFERENCES accounts(id),
-        FOREIGN KEY (keepId) REFERENCES keeps(id)
+        FOREIGN KEY (vaultId) REFERENCES vaults(id) ON DELETE CASCADE,
+        Foreign Key (creatorId) REFERENCES accounts(id) ON DELETE CASCADE,
+        FOREIGN KEY (keepId) REFERENCES keeps(id) ON DELETE CASCADE
     ) DEFAULT charset utf8 COMMENT '';
 
-\ 
+drop table vaultkeeps;
