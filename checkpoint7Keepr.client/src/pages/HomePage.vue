@@ -1,44 +1,33 @@
 <template>
-  <div class="home flex-grow-1 d-flex flex-column align-items-center justify-content-center">
-    <div class="home-card p-5 bg-white rounded elevation-3">
-      <img
-        src="https://bcw.blob.core.windows.net/public/img/8600856373152463"
-        alt="CodeWorks Logo"
-        class="rounded-circle"
-      >
-      <h1 class="my-5 bg-dark text-white p-3 rounded text-center">
-        Vue 3 Starter
-      </h1>
+  <div class="page">
+    <div class="keeps">
+      <KeepCard v-for="keep in AppState.keeps" key="keep.id" :keep="keep" />
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  setup() {
-    return {}
-  }
-}
+<script setup>
+import { ref, watchEffect, onMounted } from 'vue';
+import { AppState } from '../AppState.js';
+import KeepCard from '../components/KeepCard.vue';
+import { keepsService } from '../services/KeepsService.js';
+
+
+onMounted(async () => {
+  await keepsService.getKeeps()
+})
+
 </script>
 
 <style scoped lang="scss">
-.home {
-  display: grid;
-  height: 80vh;
-  place-content: center;
-  text-align: center;
-  user-select: none;
+.page {
+  padding: 1rem;
+}
 
-  .home-card {
-    width: 50vw;
+.keeps {
+  column-count: 3;
+  column-gap: 1rem;
+  row-gap: 1rem;
 
-    >img {
-      height: 200px;
-      max-width: 200px;
-      width: 100%;
-      object-fit: contain;
-      object-position: center;
-    }
-  }
 }
 </style>

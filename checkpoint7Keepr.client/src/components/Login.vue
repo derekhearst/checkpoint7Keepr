@@ -1,33 +1,19 @@
 <template>
-  <span class="navbar-text">
-    <button class="btn selectable text-success lighten-30 text-uppercase my-2 my-lg-0" @click="login"
-      v-if="!user.isAuthenticated">
-      Login
-    </button>
-    <div v-else>
-      <div class="dropdown dropstart my-2 my-lg-0">
-        <div type="button" class="bg-dark border-0 selectable no-select" data-bs-toggle="dropdown"
-          aria-expanded="false">
-          <div v-if="account.picture || user.picture">
-            <img :src="account.picture || user.picture" alt="account photo" height="40" class="rounded" />
-          </div>
-        </div>
-        <div class="dropdown-menu dropdown-menu-lg-left p-0" aria-labelledby="authDropdown">
-          <div class="list-group">
-            <router-link :to="{ name: 'Account' }">
-              <div class="list-group-item dropdown-item list-group-item-action">
-                Manage Account
-              </div>
-            </router-link>
-            <div class="list-group-item dropdown-item list-group-item-action text-danger selectable" @click="logout">
-              <i class="mdi mdi-logout"></i>
-              logout
-            </div>
-          </div>
-        </div>
+  <div class="px-3">
+    <button @click="login" v-if="!user.isAuthenticated">Login</button>
+    <div v-else class="d-flex gap-2 align-items-center">
+      <button class="" @click="logout">Logout</button>
+
+      <div v-if="account.picture || user.picture">
+        <RouterLink :to="{ name: 'Profile', params: { id: account.id } }">
+
+          <img :src="account.picture || user.picture" alt="account photo" />
+        </RouterLink>
       </div>
+
     </div>
-  </span>
+  </div>
+
 </template>
 
 <script>
@@ -51,4 +37,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+button {
+  background: #E9D8D6;
+  border: none;
+  border-radius: 10px;
+  padding: .25rem;
+  padding-left: .5rem;
+  padding-right: .5rem;
+  font-weight: bold;
+}
+
+img {
+  height: 75px;
+  border-radius: 50%;
+}
 </style>

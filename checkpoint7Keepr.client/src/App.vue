@@ -2,39 +2,29 @@
   <header>
     <Navbar />
   </header>
-  <main>
+  <main id="mainBody">
     <router-view />
   </main>
-   <footer class="bg-dark text-light">
-    Made with 💖 by CodeWorks
-  </footer>
+
 </template>
 
-<script>
-import { computed } from 'vue'
-import { AppState } from './AppState'
+<script setup>
+
 import Navbar from './components/Navbar.vue'
 
-export default {
-  setup() {
-    return {
-      appState: computed(() => AppState)
-    }
-  },
-  components: { Navbar }
-}
+
 </script>
 <style lang="scss">
 @import "./assets/scss/main.scss";
+</style>
 
-:root{
-  --main-height: calc(100vh - 32px - 64px);
+<style scoped>
+header {
+  z-index: 2;
 }
 
+main {
+  background: #FEF6F0;
 
-footer {
-  display: grid;
-  place-content: center;
-  height: 32px;
 }
 </style>
