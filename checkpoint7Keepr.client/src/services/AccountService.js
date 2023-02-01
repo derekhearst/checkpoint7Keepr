@@ -12,10 +12,21 @@ class AccountService {
 		}
 	}
 
-	async getMyKeeps() {}
+	async editAccount(accountData) {
+		const res = await api.put("/account", accountData)
+		AppState.account = res.data
+		return res.data
+	}
+
+	async getMyKeeps() {
+		const res = await api.get("/account/keeps")
+		AppState.myKeeps = res.data
+		return res.data
+	}
 	async getMyVaults() {
 		const res = await api.get("/account/vaults")
 		AppState.myVaults = res.data
+		return res.data
 	}
 }
 

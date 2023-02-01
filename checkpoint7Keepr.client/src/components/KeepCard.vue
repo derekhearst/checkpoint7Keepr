@@ -20,7 +20,7 @@ watchEffect(async () => {
 		mainBody.style.overflow = 'hidden'
 		let res = await keepsService.getById(props.keep.id)
 		keptCount.value = res.kept
-		props.keep.vies = res.views
+		props.keep.views = res.views
 	}
 	else {
 		mainBody.style.overflow = 'visible'
@@ -66,14 +66,14 @@ async function deleteKeep() {
 
 <template>
 	<div class="keepCard" @click="modelOpen = true">
-		<img class="keepBG" :src="keep.img" />
-		<h1>{{ keep.name }}</h1>
-		<img class="keepCreator" :src="keep.creator.picture" />
+		<img class="keepBG" :src="keep.img" :alt="keep.name" />
+		<h2>{{ keep.name }}</h2>
+		<img class="keepCreator" :title="keep.creator.name" :src="keep.creator.picture" />
 	</div>
 
 	<div class="modalBg" v-if="modelOpen" @click="modelOpen = false">
 		<div class="modalBody" @click.stop="">
-			<img :src="keep.img" class="keepImage" />
+			<img :src="keep.img" class="keepImage" alt="picture of a keep" />
 			<div class="keepBody">
 				<div class="keepHeader">
 
@@ -83,18 +83,17 @@ async function deleteKeep() {
 					<p>{{ keptCount }}</p>
 				</div>
 				<div class="keepInfo">
-
 					<h2>{{ keep.name }}</h2>
 					<p>{{ keep.description }}</p>
 
 				</div>
 				<div class="keepFooter">
-					<button class="removeKeep" @click="removeKeep" v-if="keep.vaultKeepId">
+					<button class="removeKeep" @click="removeKeep" v-if="keep.vaultKeepId && AppState.account.id">
 						<i class="mdi fs-4 mdi-close-octagon-outline"></i>
 						Un-Keep
 					</button>
 
-					<div class="d-flex align-items-center gap-3" v-else>
+					<div class="d-flex align-items-center gap-3" v-else-if="AppState.account.id">
 						<select v-model="vaultId">
 							<option v-for="vault in AppState.myVaults" :value="vault.id">{{ vault.name }}</option>
 						</select>
@@ -125,6 +124,16 @@ async function deleteKeep() {
 	margin-bottom: 1rem;
 	cursor: pointer;
 
+	h2 {
+		position: absolute;
+		bottom: 0;
+		left: .25rem;
+		margin: 0;
+		color: white;
+		// background-color: rgba(0, 0, 0, 0.212);
+
+	}
+
 
 }
 
@@ -136,15 +145,7 @@ async function deleteKeep() {
 	filter: brightness(80%);
 }
 
-h1 {
-	position: absolute;
-	bottom: 0;
-	left: .25rem;
-	margin: 0;
-	color: white;
-	// background-color: rgba(0, 0, 0, 0.212);
 
-}
 
 .keepCreator {
 	position: absolute;
@@ -198,6 +199,7 @@ h1 {
 	display: flex;
 	max-width: 80%;
 	max-height: 80%;
+
 }
 
 .keepImage {
@@ -224,8 +226,6 @@ h1 {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-
-
 }
 
 .keepFooter {
@@ -251,5 +251,47 @@ h1 {
 	border: none;
 	border-radius: 5px;
 	padding: 5px 10px;
+}
+
+@media (max-width: 768px) {
+	.modalBody {
+		flex-direction: column;
+		max-height: 100%;
+		height: 95%;
+	}
+
+	.keepImage {
+		width: 100%;
+		height: 30%;
+		object-fit: cover;
+	}
+
+	.keepBody {
+		width: 100%;
+		font-size: 1rem;
+		padding: .25rem;
+		flex-grow: 1;
+	}
+
+	.keepHeader {
+		margin-bottom: -1rem;
+	}
+
+	.keepFooter {
+		gap: .5rem;
+		justify-content: center;
+		flex-grow: 1;
+
+	}
+
+	.keepCard {
+		h2 {
+			font-size: 1.2rem;
+		}
+	}
+
+	.keepCreator {
+		display: none;
+	}
 }
 </style>

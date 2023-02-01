@@ -1,9 +1,9 @@
 <template>
   <header>
-    <div class="d-flex gap-3 ps-3">
+    <div class="header">
 
       <a href="#" class="buttonHome">Home</a>
-      <div class="dropdown">
+      <div class="dropdown" v-if="AppState.account.id">
         <button class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Create</button>
         <ul class="dropdown-menu">
           <li><button class="dropdown-item" @click="isKeepModalOpen = true">New Keep</button></li>
@@ -20,26 +20,28 @@
     <div class="modalBody" @click.stop="">
       <h2>Create Vault</h2>
       <form @submit.prevent="createVault">
-        <div>
-          <label for="name">Vault Name</label>
+        <label for="name">
+          Vault Name
           <input type="text" required name="name" id="name" />
-        </div>
-        <div>
-          <label for="description">Vault Description</label>
+        </label>
+        <label for="description">
+          Vault Description
           <input type="text" required name="description" id="description" />
-        </div>
-        <div>
-          <label for="img">Vault Image</label>
+        </label>
+        <label for="img">
+          Vault Image
           <input type="url" required name="img" id="img" />
-        </div>
-        <div>
-          <label for="isPrivate">Private</label>
+        </label>
+        <label for="isPrivate">
+          Private
           <input type="checkbox" name="isPrivate" id="isPrivate" />
-        </div>
-        <div>
+        </label>
+        <div class="d-flex justify-content between">
+
           <button type="button" @click="isVaultModalOpen = false">Cancel</button>
           <button type="submit">Create Vault</button>
         </div>
+
       </form>
     </div>
   </div>
@@ -48,23 +50,31 @@
     <div class="modalBody" @click.stop="">
       <h2>Create Keep</h2>
       <form @submit.prevent="createKeep">
-        <div>
-          <label for="title">Keep title</label>
-          <input type="text" required name="title" id="title" />
-        </div>
 
-        <div>
-          <label for="img">Keep Image</label>
+        <label for="title">Keep title
+
+          <input type="text" required name="title" id="title" />
+        </label>
+
+
+
+        <label for="img">Keep Image
+
           <input type="url" required name="img" id="img" />
-        </div>
-        <div>
-          <label for="description">Keep Description</label>
+        </label>
+
+
+        <label for="description">Keep Description
+
           <textarea type="text" required name="description" id="description"></textarea>
-        </div>
-        <div>
+        </label>
+
+        <div class="d-flex justify-content-between">
+
           <button type="button" @click="isKeepModalOpen = false">Cancel</button>
           <button type="submit">Create Keep</button>
         </div>
+
       </form>
     </div>
   </div>
@@ -79,7 +89,7 @@ import { keepsService } from '../services/KeepsService.js';
 import { vaultsService } from '../services/VaultsService.js';
 import Pop from '../utils/Pop.js';
 import Login from './Login.vue'
-
+import { AppState } from '../AppState.js';
 async function createKeep(e) {
   try {
     keepsService.createKeep(
@@ -135,7 +145,19 @@ watchEffect(() => {
 
 </script>
 
+
 <style scoped>
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .25rem;
+  flex-wrap: wrap;
+
+  align-self: stretch !important;
+
+}
+
 header {
   background: rgba(254, 246, 240, 1);
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.1);
@@ -189,11 +211,17 @@ img {
   flex-direction: column;
 }
 
-.modalBody div {
-  margin-bottom: 1rem;
+.modalBody label {
   display: flex;
-  gap: 1rem;
+  align-items: center;
   justify-content: space-between;
+  gap: .5rem;
+}
+
+.modalBody form {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
 }
 
 .modalBody button {
@@ -206,5 +234,26 @@ img {
   font-weight: bold;
   color: black;
   cursor: pointer;
+  margin: auto;
+}
+
+@media (max-width: 600px) {
+  .modalBody {
+    width: 85%;
+
+    padding: .25rem;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: .1rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: .7rem;
+  }
 }
 </style>

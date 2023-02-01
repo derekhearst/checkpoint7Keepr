@@ -79,17 +79,4 @@ public class VaultsRepository
 		}, new { accountId, userId }).ToList();
 	}
 
-	public List<Vault> GetMyVaults(string myAccountId)
-	{
-		return _db.Query<Vault, Account, Vault>(@"
-		SELECT * FROM vaults v 
-		JOIN accounts a ON v.creatorId = a.id  
-		WHERE v.creatorId = @myAccountId;",
-		(v, a) =>
-		{
-			v.Creator = a;
-			return v;
-		}, new { myAccountId }).ToList();
-	}
-
 }

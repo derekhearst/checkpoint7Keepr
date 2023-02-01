@@ -1,10 +1,10 @@
 <template>
-  <div class="px-3">
+  <div class="">
     <button @click="login" v-if="!user.isAuthenticated">Login</button>
-    <div v-else class="d-flex gap-2 align-items-center">
+    <div v-else class="bits">
       <button class="" @click="logout">Logout</button>
       <div v-if="account.id">
-        <RouterLink :to="{ name: 'Profile', params: { id: account.id } }">
+        <RouterLink :to="{ name: 'Account' }">
           <img :src="account.picture || user.picture" alt="account photo" />
         </RouterLink>
       </div>
@@ -48,5 +48,13 @@ button {
 img {
   height: 75px;
   border-radius: 50%;
+}
+
+.bits {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap-reverse;
+  gap: .5rem;
+  justify-content: center;
 }
 </style>

@@ -31,7 +31,7 @@ onMounted(async () => {
 
 <template>
 	<div class="d-flex flex-column pt-3">
-		<img v-if="profile.coverImg" :src="profile.coverImg" alt="CoverIMG">
+		<img v-if="profile.coverImg" :src="profile.coverImg" alt="CoverIMG" class="coverImg">
 		<div class="d-flex flex-column align-items-center">
 			<img :src="profile.picture" class="rounded-circle">
 			<h1>{{ profile.name }}</h1>
@@ -61,6 +61,26 @@ onMounted(async () => {
 	column-gap: 1rem;
 	row-gap: 1rem;
 }
+
+.coverImg {
+	width: 40rem;
+	height: 200px;
+	object-fit: cover;
+	margin: auto;
+	margin-bottom: -3rem;
+}
+
+@media (max-width: 768px) {
+	.keeps {
+		column-count: 1;
+	}
+
+	.coverImg {
+		width: 100%;
+	}
+}
+
+
 
 .vaults {
 	display: flex;

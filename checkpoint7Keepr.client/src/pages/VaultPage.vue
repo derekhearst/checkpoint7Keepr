@@ -13,9 +13,15 @@ const keeps = ref([]);
 onMounted(async () => {
 	try {
 		vault.value = await vaultsService.getVaultById(route.params.id)
+
 		keeps.value = await keepsService.getByVaultId(route.params.id)
 	} catch (error) {
-		Pop.error(error)
+		if (vault.value.id == null || vault.value.id == undefined) {
+			Pop.error('Vault private or not found')
+			router.push({ name: 'Home' })
+		} else {
+			Pop.error(error)
+		}
 	}
 })
 
@@ -119,8 +125,8 @@ watchEffect(() => {
 				</label>
 
 				<div class="d-flex align-items-center justify-content-between">
-					<button type="button" class="w-25" @click="editModalOpen = false">Cancel</button>
-					<button type="submit" class="w-25" @click="editVault">Save</button>
+					<button type="button" class="px-3" @click="editModalOpen = false">Cancel</button>
+					<button type="submit" class="px-3" @click="editVault">Save</button>
 				</div>
 
 			</form>
@@ -227,18 +233,39 @@ watchEffect(() => {
 	form {
 		display: flex;
 		flex-direction: column;
-		gap: .5rem;
+		gap: 1rem;
 	}
 
 	label {
 		display: flex;
-		gap: 2rem;
+		gap: 0rem;
 		align-items: center;
 		justify-content: space-between;
 
 		input {
 			width: 20rem;
 		}
+	}
+
+}
+
+@media (max-width: 768px) {
+	.vaultCover {
+		width: 100%;
+		height: 20rem;
+	}
+
+	.vaultKeeps {
+		columns: 1;
+	}
+
+	label {
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	input {
+		width: 100% !important;
 	}
 
 }

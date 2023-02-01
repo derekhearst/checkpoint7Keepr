@@ -36,4 +36,16 @@ onMounted(async () => {
   row-gap: 1rem;
 
 }
+
+@media (max-width: 768px) {
+
+  .page {
+    padding: .25rem;
+    padding-top: 1rem;
+  }
+
+  .keeps {
+    column-count: 2;
+  }
+}
 </style>

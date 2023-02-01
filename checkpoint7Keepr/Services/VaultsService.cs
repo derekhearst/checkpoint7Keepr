@@ -34,8 +34,4 @@ public class VaultsService
 		return _vr.GetVaultsByAccountId(id, userId);
 	}
 
-	public List<Vault> GetMyVaults(string id)
-	{
-		return _vr.GetMyVaults(id);
-	}
 }
